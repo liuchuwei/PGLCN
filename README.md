@@ -47,6 +47,8 @@
 ## Getting Started
 ## Usage
 ## License
+Distributed under the GPL-2.0 License License. See `LICENSE` for more information.
+
 ## Contact
 <a href="Liuchw3:liuchw3@mail2.sysu.edu.cn">liuchw3@mail2.sysu.edu.cn</a>
 ## References
