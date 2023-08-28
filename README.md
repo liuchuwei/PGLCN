@@ -1,4 +1,23 @@
-# PGLCN
+
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/liuchuwei/PGLCN">
+    <img src="_plots/logo.png" alt="Logo" width="80" height="80">
+  </a>
+
+<h2 align="center">PGLCN</h2>
+
+  <p align="center">
+    Biological informed graph neural network for tumor mutation burden prediction and immunotherapy-related pathway analysis in gastric cancer
+    <br />
+    <br />
+    <br />
+
+  </p>
+</p>
+
+
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
