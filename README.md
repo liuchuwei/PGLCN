@@ -3,7 +3,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/liuchuwei/PGLCN">
-    <img src="_plot/logo.png" alt="Logo" width="600" height="240">
+    <img src="_plot/logo.png" alt="Logo" width="800" height="240">
   </a>
 
 <h2 align="center">PGLCN</h2>
