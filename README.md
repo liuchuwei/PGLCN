@@ -45,6 +45,25 @@
 ## Dependence
 ## About The Project
 ## Getting Started
+### Prerequisites
+
+* check environments.yml for list of needed packages
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/liuchuwei/PGLCN.git
+   ```
+2. Create conda environment
+   ```sh
+   conda env create -f environment.yml
+   ```
+3. Based on your use, you may need to download one or more of the following
+
+   a. [Data files](https://drive.google.com/drive/folders/1DEYx3OodVK8iX0bxYjvdnYTJ1hyJ6gTs) 
+
+<!-- USAGE EXAMPLES -->
 ## Usage
 ## License
 Distributed under the GPL-2.0 License License. See `LICENSE` for more information.
