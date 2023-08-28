@@ -23,9 +23,6 @@
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
@@ -40,10 +37,6 @@
 </details>
 
 
-
-<!-- ABOUT THE PROJECT -->
-## Dependence
-## About The Project
 ## Getting Started
 ### Prerequisites
 
@@ -65,6 +58,17 @@
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+1. Activate the created conda environment
+   ```sh
+   source activate PGLCN
+   ```
+2. Train model
+
+   ```sh
+   ```
+3. Explain model
+   ```sh
+   ```
 ## License
 Distributed under the GPL-2.0 License License. See `LICENSE` for more information.
 
