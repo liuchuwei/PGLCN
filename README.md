@@ -3,7 +3,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/liuchuwei/PGLCN">
-    <img src="_plots/logo.png" alt="Logo" width="80" height="80">
+    <img src="_plot/logo.png" alt="Logo" width="800" height="240">
   </a>
 
 <h2 align="center">PGLCN</h2>
@@ -47,5 +47,8 @@
 ## Getting Started
 ## Usage
 ## License
+Distributed under the GPL-2.0 License License. See `LICENSE` for more information.
+
 ## Contact
+<a href="Liuchw3:liuchw3@mail2.sysu.edu.cn">liuchw3@mail2.sysu.edu.cn</a>
 ## References
