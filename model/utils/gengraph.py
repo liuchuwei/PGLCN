@@ -11,7 +11,7 @@ import numpy as np
 
 from tensorboardX import SummaryWriter
 
-from model.pgexplainer import synthetic_structsim
+from utils import synthetic_structsim
 from utils import featgen
 import utils as io_utils
 

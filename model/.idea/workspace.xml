@@ -2,28 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1f5074f6-b269-4492-bda9-01166f2b6688" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/model/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/layers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/metrics.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model/model_factory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/params/ML_params.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/params/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/params/explain.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/params/train.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pglcn.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/train/TrainML.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/train/TrainNodeClassifier.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/train/TrainPglcn.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/train/TrainSglcn.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/train/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/featgen.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/gengraph.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/io_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/model_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/parser_utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/preprocess.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/train_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,13 +30,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "WebServerToolWindowFactoryState": "true",
-    "last_opened_file_path": "C:/Users/liuch/Desktop/03.Nano/mDRS",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/liuch/Desktop/03.Nano/mDRS&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Python.pglcn">
     <configuration name="TrainPglcn" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="model" />
@@ -149,6 +128,7 @@
       <workItem from="1693241062747" duration="1270000" />
       <workItem from="1693284434260" duration="1637000" />
       <workItem from="1693303013915" duration="8215000" />
+      <workItem from="1693312116184" duration="1266000" />
     </task>
     <servers />
   </component>
@@ -184,7 +164,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/pglcn_py$TrainPglcn.coverage" NAME="TrainPglcn Coverage Results" MODIFIED="1693308380396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/train" />
-    <SUITE FILE_PATH="coverage/pglcn_py$pglcn.coverage" NAME="pglcn Coverage Results" MODIFIED="1693311311764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pglcn_py$pglcn.coverage" NAME="pglcn Coverage Results" MODIFIED="1693312117778" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pglcn_py$main.coverage" NAME="main Coverage Results" MODIFIED="1693303146671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
