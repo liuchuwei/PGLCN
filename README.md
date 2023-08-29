@@ -23,9 +23,6 @@
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
@@ -40,12 +37,38 @@
 </details>
 
 
-
-<!-- ABOUT THE PROJECT -->
-## Dependence
-## About The Project
 ## Getting Started
+### Prerequisites
+
+* check environments.yml for list of needed packages
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/liuchuwei/PGLCN.git
+   ```
+2. Create conda environment
+   ```sh
+   conda env create -f environment.yml
+   ```
+3. Based on your use, you may need to download one or more of the following
+
+   a. [Data files](https://drive.google.com/drive/folders/1DEYx3OodVK8iX0bxYjvdnYTJ1hyJ6gTs) 
+
+<!-- USAGE EXAMPLES -->
 ## Usage
+1. Activate the created conda environment
+   ```sh
+   source activate PGLCN
+   ```
+2. Train model
+
+   ```sh
+   ```
+3. Explain model
+   ```sh
+   ```
 ## License
 Distributed under the GPL-2.0 License License. See `LICENSE` for more information.
 
