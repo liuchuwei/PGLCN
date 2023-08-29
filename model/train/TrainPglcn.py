@@ -33,6 +33,9 @@ def train_pglcn_iteration(model, args, dataset=None):
     writer = []
     writer.append(["Accuracy", "Recall" , "F1 score", "AUC", "Precision", "Time"])
 
+    if not os.path.exists(("log/" + args.dataset+ "_perform/")):
+        os.makedirs(("log/" + args.dataset+ "_perform/"))
+
     fl_path = "log/%s_perform/%s_%s_lr1_%s_lr2_%f_dropout1_%s_dropout3_%s_npc_%s_omic_%s_h_30_gl_70_weight_decay_10_4" % \
               (args.dataset,args.item,args.method,args.lr1, args.lr2, args.dropout1, args.dropout2, args.npc, args.omic)
 
@@ -168,8 +171,6 @@ def train_pglcn_iteration(model, args, dataset=None):
         "AUC": auc_list,
         "Precision": prec_list
     })
-    if not os.path.exists(("log/" + args.dataset+ "_perform/")):
-        os.makedirs(("log/" + args.dataset+ "_perform/"))
 
     log.to_csv(save_csv, index=False)
 

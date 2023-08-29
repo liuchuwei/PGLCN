@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1f5074f6-b269-4492-bda9-01166f2b6688" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train/TrainPglcn.py" beforeDir="false" afterPath="$PROJECT_DIR$/train/TrainPglcn.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +128,7 @@
       <workItem from="1693241062747" duration="1270000" />
       <workItem from="1693284434260" duration="1637000" />
       <workItem from="1693303013915" duration="8215000" />
-      <workItem from="1693312116184" duration="1266000" />
+      <workItem from="1693312116184" duration="1972000" />
     </task>
     <servers />
   </component>
@@ -153,11 +153,6 @@
           <url>file://$PROJECT_DIR$/params/train.py</url>
           <line>93</line>
           <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train/TrainPglcn.py</url>
-          <line>35</line>
-          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
