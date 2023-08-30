@@ -184,7 +184,7 @@ class PGLCN(nn.Module):
             bias=False,
             gpu=self.gpu,
             act=torch.nn.ReLU(),
-            dropout=0.0,
+            dropout=self.args.dropout2,
         )
 
         self.conv_last = GraphConvSlice(
@@ -194,7 +194,7 @@ class PGLCN(nn.Module):
             bias=False,
             gpu=self.gpu,
             act=lambda x: x,
-            dropout=0.0,
+            dropout=self.args.dropout2,
         )
 
         return self.conv_gl, self.conv_first, self.conv_last
@@ -202,7 +202,7 @@ class PGLCN(nn.Module):
     def build_pred_layers(self):
 
         pred_layers = []
-        drop_rate = self.args.dropout2
+        drop_rate = self.args.dropout3
         input_dim = self.input.size()[1]*(self.output_dim+self.hidden_gcn)
         # pred_layers.append(nn.Linear(input_dim, 4096))
         # pred_layers.append(torch.nn.ReLU())

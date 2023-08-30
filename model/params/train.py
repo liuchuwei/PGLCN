@@ -46,8 +46,10 @@ def argparser():
     parser.add_argument('--hidden_gcn', dest='hidden_gcn', type=int,
                         help='Hidden gcn dimension')
     parser.add_argument('--dropout1', dest='dropout', type=int,
-                        help='Graph dropout ratio')
+                        help='Graph learn dropout ratio')
     parser.add_argument('--dropout2', dest='dropout', type=int,
+                        help='Graph gcn dropout ratio')
+    parser.add_argument('--dropout3', dest='dropout', type=int,
                         help='Dense dropout ratio')
     parser.add_argument('--weight_decay', dest='weight_decay', type=int,
                         help='Weight_decay ratio')
