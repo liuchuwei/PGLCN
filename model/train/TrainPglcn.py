@@ -44,6 +44,7 @@ def train_pglcn_iteration(model, args, dataset=None):
 
     for exp in tqdm(range(args.iexp * 5)):
     # for i in tqdm(range(5)):
+    #     exp = 2
         best = 10000
 
         state_dict = torch.load("log/tmp.cpkt")
@@ -124,14 +125,14 @@ def train_pglcn_iteration(model, args, dataset=None):
                 logger.append([acc, recall, f1_score, auc, prec])
 
 
-            cost = val_loss
+            cost = val_loss2
             test_acc_list.append(acc)
-            print("Epoch:", '%04d' % (epoch + 1), "train_loss=", "{:.5f}".format(train_loss2),
-                  "train_acc=", "{:.5f}".format(train_acc), "val_loss=", "{:.5f}".format(val_loss),
-                  "val_acc=", "{:.5f}".format(val_acc), "test_acc=", "{:.5f}".format(acc), "time=",
-                  "{:.5f}".format(time.time() - t))
+            # print("Epoch:", '%04d' % (epoch + 1), "train_loss=", "{:.5f}".format(train_loss2),
+            #       "train_acc=", "{:.5f}".format(train_acc), "val_loss=", "{:.5f}".format(val_loss2),
+            #       "val_acc=", "{:.5f}".format(val_acc), "test_acc=", "{:.5f}".format(acc), "time=",
+            #       "{:.5f}".format(time.time() - t))
 
-            if cost <= best:
+            if cost < best:
                 best_epoch = epoch
                 best = cost
                 patience = 0
@@ -145,18 +146,24 @@ def train_pglcn_iteration(model, args, dataset=None):
                 # sio.savemat("S.mat", {'adjfix': np.array(Smap)})
                 break
 
-        print("Optimization Finished!")
-        # print("----------------------------------------------")
-        print("The finall result:", test_acc_list[-(args.early_stopping + 1)])
-        # print("----------------------------------------------")
 
         # acc, recall, f1_score, auc, prec = logger[-(args.early_stopping + 1)]
-        acc, recall, f1_score, auc, prec = logger[-(args.early_stopping + 1)]
+        acc, recall, f1_score, auc, prec = logger[- 1]
         acc_list.append(acc)
         recall_list.append(recall)
         f1_list.append(f1_score)
         auc_list.append(auc)
         prec_list.append(prec)
+
+        print("Optimization Finished!")
+        # print("----------------------------------------------")
+        print("Epoch:", '%04d' % (epoch + 1), "train_loss=", "{:.5f}".format(train_loss2),
+              "train_acc=", "{:.5f}".format(train_acc), "val_loss=", "{:.5f}".format(val_loss2),
+              "val_acc=", "{:.5f}".format(val_acc), "test_acc=", "{:.5f}".format(acc), "time=",
+              "{:.5f}".format(time.time() - t))
+        print("acc:", '%.4f' % (acc), "recall:", '%.4f' % (recall), "f1_score:", '%.4f' % (f1_score),
+              "auc:", '%.4f' % (auc), "prec:", '%.4f' % (prec),)
+        # print("----------------------------------------------")
 
         # writer.append(["%s,%s,%s,%s,%s" % (str(acc), str(recall), str(f1_score), str(auc), str(prec),)])
         writer.append([acc,recall,f1_score,auc, prec, time.time() - t])

@@ -15,21 +15,22 @@ def set_defaults(args):
 
         # model
         args.placeholders=True
-        args.dropout1=0  # graph dropout
-        args.dropout2=0  # dense dropout
+        args.dropout1=0.6  # graph dropout 0.6
+        args.dropout2=0.  # dense dropout 0.5
         args.bias=True
         args.weight_decay=1e-8
-        args.hidden_gl=70
-        args.hidden_gcn=30
+        args.hidden_gl=70 # 70
+        args.hidden_gcn=30 # 30
 
         # train
+        args.seed=666666
         args.iexp=30
         args.lr1=0.1
-        args.lr2=0.00005
+        args.lr2=0.00005   # 0.00005
         args.losslr1=0.01
         args.losslr2=0.00001
-        args.epoch=1000
+        args.epoch=300
         args.clip=2.0
-        args.early_stopping=100
+        args.early_stopping=10
 
     return args

@@ -1,3 +1,5 @@
+import random
+
 from train.TrainPglcn import *
 from train.TrainML import *
 from train.TrainSglcn import *
@@ -36,3 +38,11 @@ def train_model(model, args, log=None, dataset=None):
                              "adaboost", "decision_tree"] :
 
         train_ML(model, args=args, dataset=dataset)
+
+
+
+def set_seed(seed=1):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)

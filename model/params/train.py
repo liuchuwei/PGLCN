@@ -3,7 +3,7 @@ from argparse import ArgumentDefaultsHelpFormatter
 from utils.io_utils import obtain_dataset
 from utils.model_utils import obtain_placeholders, build_model
 from utils.parser_utils import set_defaults
-from utils.train_utils import train_model
+from utils.train_utils import train_model, set_seed
 
 def argparser():
     parser = argparse.ArgumentParser(
@@ -64,6 +64,9 @@ def argparser():
                             help='early_stopping steps')
     opt_parser.add_argument('--clip', dest='clip', type=float,
                             help='Gradient clipping.')
+    opt_parser.add_argument('--seed', dest='seed', type=float,
+                            help='Seed.')
+
     ## pglcn
     opt_parser.add_argument('--lr1', dest='lr1', type=float,
                             help='Sparse learning rate.')
@@ -79,6 +82,9 @@ def argparser():
 def main(args):
     # set default parser
     set_defaults(args)
+
+    # set seed
+    set_seed(args.seed)
 
     # obtain dataset
     dataset = obtain_dataset(args)
