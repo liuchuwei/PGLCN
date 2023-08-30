@@ -16,7 +16,7 @@ def set_defaults(args):
         # model
         args.placeholders=True
         args.dropout1=0.6  # graph learn dropout 0.6
-        args.dropout2=0.3  # graph gcn dropout 0.3; 0
+        args.dropout2=0.  # graph gcn dropout 0.3; 0
         args.dropout3=0.  # dense dropout 0.3; 0
         args.bias=True
         args.weight_decay=1e-8  # 1e-8
