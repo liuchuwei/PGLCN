@@ -18,7 +18,7 @@ def set_defaults(args):
             args.placeholders=True
             args.dropout1=0.6  # graph learn dropout 0.6
             args.dropout2=0.  # graph gcn dropout 0
-            args.dropout3=0. # dense dropout  0
+            args.dropout3=0.  # dense dropout  0
             args.bias=True
             args.weight_decay=1e-8  # 1e-8
             args.hidden_gl=70 # 70
@@ -42,8 +42,8 @@ def set_defaults(args):
             args.dropout3 = 0.3  # dense dropout  0.3
             args.bias = True
             args.weight_decay = 1e-4  # 1e-4
-            args.hidden_gl = 35  # 70
-            args.hidden_gcn = 15  # 30
+            args.hidden_gl = 70  # 70
+            args.hidden_gcn = 30  # 30
 
             # train
             args.seed = 666666
@@ -58,13 +58,13 @@ def set_defaults(args):
 
         if args.dataset == "ucec":
             args.placeholders = True
-            args.dropout1 = 0.6  # graph learn dropout 0.6
-            args.dropout2 = 0.  # graph gcn dropout 0
-            args.dropout3 = 0.  # dense dropout  0
+            args.dropout1 = 0.6  # graph learn dropout 0.3
+            args.dropout2 = 0.0  # graph gcn dropout 0
+            args.dropout3 = 0.0  # dense dropout  0
             args.bias = True
             args.weight_decay = 1e-8  # 1e-8
-            args.hidden_gl = 70  # 70
-            args.hidden_gcn = 30  # 30
+            args.hidden_gl = 90  # 90
+            args.hidden_gcn = 25  # 25
 
             # train
             args.seed = 666666

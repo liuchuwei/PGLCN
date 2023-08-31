@@ -36,15 +36,16 @@ def train_pglcn_iteration(model, args, dataset=None):
     if not os.path.exists(("log/" + args.dataset+ "_perform/")):
         os.makedirs(("log/" + args.dataset+ "_perform/"))
 
-    fl_path = "log/%s_perform/%s_%s_lr1_%s_lr2_%f_dropout1_%s_dropout3_%s_npc_%s_omic_%s_h_30_gl_70_weight_decay_10_4" % \
-              (args.dataset,args.item,args.method,args.lr1, args.lr2, args.dropout1, args.dropout2, args.npc, args.omic)
+    fl_path = "log/%s_perform/%s_%s_lr1_%s_lr2_%f_dropout1_%s_dropout2_%s_dropout3_%s_npc_%s_omic_%s_h_%s_gl_%s_weight_decay_10_4" % \
+              (args.dataset,args.item,args.method,args.lr1, args.lr2, args.dropout1, args.dropout2, args.dropout3 ,args.npc, args.omic,
+               args.hidden_gl, args.hidden_gcn)
 
     save_log = fl_path + ".txt"
     save_csv = fl_path + ".csv"
 
     for exp in tqdm(range(args.iexp * 5)):
     # for i in tqdm(range(5)):
-    #     exp = 2
+        exp = 1
         best = 10000
 
         state_dict = torch.load("log/tmp.cpkt")
