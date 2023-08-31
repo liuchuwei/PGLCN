@@ -14,25 +14,68 @@ def set_defaults(args):
         args.gpu=True
 
         # model
-        args.placeholders=True
-        args.dropout1=0.6  # graph learn dropout 0.6
-        args.dropout2=0.  # graph gcn dropout 0.3; 0
-        args.dropout3=0.  # dense dropout 0.3; 0
-        args.bias=True
-        args.weight_decay=1e-8  # 1e-8
-        args.hidden_gl=70 # 70
-        args.hidden_gcn=25 # 30
+        if args.dataset=="stad":
+            args.placeholders=True
+            args.dropout1=0.6  # graph learn dropout 0.6
+            args.dropout2=0.  # graph gcn dropout 0
+            args.dropout3=0. # dense dropout  0
+            args.bias=True
+            args.weight_decay=1e-8  # 1e-8
+            args.hidden_gl=70 # 70
+            args.hidden_gcn=30 # 30
 
-        # train
-        args.seed=666666
-        args.iexp=30
-        args.lr1=0.1
-        args.lr2=0.00005   # 0.00005
-        args.losslr1=0.01
-        args.losslr2=0.00001
-        args.epoch=300
-        args.clip=2.0
-        args.early_stopping=10
+            # train
+            args.seed=666666
+            args.iexp=30
+            args.lr1=0.1
+            args.lr2=0.00005   # 0.00005
+            args.losslr1=0.01
+            args.losslr2=0.00001
+            args.epoch=300
+            args.clip=2.0
+            args.early_stopping=10
+
+        if args.dataset == "coad":
+            args.placeholders = True
+            args.dropout1 = 0.6  # graph learn dropout 0.6
+            args.dropout2 = 0.3  # graph gcn dropout 0
+            args.dropout3 = 0.3  # dense dropout  0
+            args.bias = True
+            args.weight_decay = 1e-4  # 1e-8
+            args.hidden_gl = 70  # 70
+            args.hidden_gcn = 30  # 30
+
+            # train
+            args.seed = 666666
+            args.iexp = 30
+            args.lr1 = 0.1
+            args.lr2 = 0.00005  # 0.00005
+            args.losslr1 = 0.01
+            args.losslr2 = 0.00001
+            args.epoch = 300
+            args.clip = 2.0
+            args.early_stopping = 10
+
+        if args.dataset == "ucec":
+            args.placeholders = True
+            args.dropout1 = 0.6  # graph learn dropout 0.6
+            args.dropout2 = 0.  # graph gcn dropout 0
+            args.dropout3 = 0.  # dense dropout  0
+            args.bias = True
+            args.weight_decay = 1e-8  # 1e-8
+            args.hidden_gl = 70  # 70
+            args.hidden_gcn = 30  # 30
+
+            # train
+            args.seed = 666666
+            args.iexp = 30
+            args.lr1 = 0.1
+            args.lr2 = 0.00005  # 0.00005
+            args.losslr1 = 0.01
+            args.losslr2 = 0.00001
+            args.epoch = 300
+            args.clip = 2.0
+            args.early_stopping = 10
 
     if args.project in ["stad_PC1", "stad_PC2", "stad_PC3", "stad_PC4", "stad_PC5",
            "coad_PC1", "coad_PC2", "coad_PC3", "coad_PC4", "coad_PC5",
