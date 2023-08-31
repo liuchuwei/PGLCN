@@ -138,18 +138,34 @@ def load_pathway_graph(args, path="data/"):
     omic = args.omic
     pc = args.npc
     sam = int(Exp.shape[1]/omic/pc)
-    mRNA, CNV, MET = np.split(Exp.to_numpy(), omic, axis=1)
-    mRNA = np.split(mRNA, sam, axis=1)
-    CNV = np.split(CNV, sam, axis=1)
-    MET = np.split(MET, sam, axis=1)
+    if omic==1:
+        sam_list = np.split(Exp.to_numpy(), sam, axis=1)
 
-    sam_list = []
-    for i in range(sam):
-        s_mRNA = mRNA[i]
-        s_CNV = CNV[i]
-        s_MET = MET[i]
-        s_mul = np.concatenate([s_mRNA, s_CNV, s_MET], axis=1)
-        sam_list.append(s_mul)
+    elif omic==2:
+        omic_1, omic_2 = np.split(Exp.to_numpy(), omic, axis=1)
+        omic_1 = np.split(omic_1, sam, axis=1)
+        omic_2 = np.split(omic_2, sam, axis=1)
+
+        sam_list = []
+        for i in range(sam):
+            s_omic_1 = omic_1[i]
+            s_omic_2 = omic_2[i]
+            s_mul = np.concatenate([s_omic_1, s_omic_2], axis=1)
+            sam_list.append(s_mul)
+
+    else:
+        mRNA, CNV, MET = np.split(Exp.to_numpy(), omic, axis=1)
+        mRNA = np.split(mRNA, sam, axis=1)
+        CNV = np.split(CNV, sam, axis=1)
+        MET = np.split(MET, sam, axis=1)
+
+        sam_list = []
+        for i in range(sam):
+            s_mRNA = mRNA[i]
+            s_CNV = CNV[i]
+            s_MET = MET[i]
+            s_mul = np.concatenate([s_mRNA, s_CNV, s_MET], axis=1)
+            sam_list.append(s_mul)
 
     # balance sample
     if args.imbalance:

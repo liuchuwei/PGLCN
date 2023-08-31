@@ -14,7 +14,8 @@ def argparser():
     # project
     parser.add_argument('--project', dest='project',
                            help='Possible values:'
-                                'train_stad_2pc_30exp')
+                                'Diff_PC: stad_PC1, stad_PC2...'
+                                'train_stad_2pc_30exp...')
 
     # dataset
     parser.add_argument('--dataset', dest='dataset',
@@ -37,9 +38,9 @@ def argparser():
 
     # model
     parser.add_argument('--method', dest='method',
-                        help='Method. Possible values: base, gat, glcn, simaese_gcn, sglcn'
-                             'decision tree, l2 logistic regression, random forest, adaptive boosting,'
-                             'linear support vector machine, RBF support vector machine,')
+                        help='Method. Possible values: base, gat, glcn, sglcn'
+                             'decision_tree, sgd, random_forest, adaboost,'
+                             'svc_linear, svc_rbf,')
     ## pglcn
     parser.add_argument('--hidden_gl', dest='hidden_gl', type=int,
                         help='Hidden gl dimension')

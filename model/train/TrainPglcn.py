@@ -127,10 +127,10 @@ def train_pglcn_iteration(model, args, dataset=None):
 
             cost = val_loss2
             test_acc_list.append(acc)
-            # print("Epoch:", '%04d' % (epoch + 1), "train_loss=", "{:.5f}".format(train_loss2),
-            #       "train_acc=", "{:.5f}".format(train_acc), "val_loss=", "{:.5f}".format(val_loss2),
-            #       "val_acc=", "{:.5f}".format(val_acc), "test_acc=", "{:.5f}".format(acc), "time=",
-            #       "{:.5f}".format(time.time() - t))
+            print("Epoch:", '%04d' % (epoch + 1), "train_loss=", "{:.5f}".format(train_loss2),
+                  "train_acc=", "{:.5f}".format(train_acc), "val_loss=", "{:.5f}".format(val_loss2),
+                  "val_acc=", "{:.5f}".format(val_acc), "test_acc=", "{:.5f}".format(acc), "time=",
+                  "{:.5f}".format(time.time() - t))
 
             if cost < best:
                 best_epoch = epoch
