@@ -28,6 +28,7 @@ def train_pglcn_iteration(model, args, dataset=None):
     f1_list = []
     auc_list = []
     prec_list = []
+    time_list = []
 
     print("Repeat 5 fold cross-validation for %s times" % (args.iexp))
     writer = []
@@ -128,10 +129,10 @@ def train_pglcn_iteration(model, args, dataset=None):
 
             cost = val_loss2
             test_acc_list.append(acc)
-            print("Epoch:", '%04d' % (epoch + 1), "train_loss=", "{:.5f}".format(train_loss2),
-                  "train_acc=", "{:.5f}".format(train_acc), "val_loss=", "{:.5f}".format(val_loss2),
-                  "val_acc=", "{:.5f}".format(val_acc), "test_acc=", "{:.5f}".format(acc), "time=",
-                  "{:.5f}".format(time.time() - t))
+            # print("Epoch:", '%04d' % (epoch + 1), "train_loss=", "{:.5f}".format(train_loss2),
+            #       "train_acc=", "{:.5f}".format(train_acc), "val_loss=", "{:.5f}".format(val_loss2),
+            #       "val_acc=", "{:.5f}".format(val_acc), "test_acc=", "{:.5f}".format(acc), "time=",
+            #       "{:.5f}".format(time.time() - t))
 
             if cost < best:
                 best_epoch = epoch
@@ -150,34 +151,36 @@ def train_pglcn_iteration(model, args, dataset=None):
 
         # acc, recall, f1_score, auc, prec = logger[-(args.early_stopping + 1)]
         acc, recall, f1_score, auc, prec = logger[- 1]
+        time_list.append(time.time() - t)
         acc_list.append(acc)
         recall_list.append(recall)
         f1_list.append(f1_score)
         auc_list.append(auc)
         prec_list.append(prec)
 
-        print("Optimization Finished!")
+        # print("Optimization Finished!")
         # print("----------------------------------------------")
-        print("Epoch:", '%04d' % (epoch + 1), "train_loss=", "{:.5f}".format(train_loss2),
-              "train_acc=", "{:.5f}".format(train_acc), "val_loss=", "{:.5f}".format(val_loss2),
-              "val_acc=", "{:.5f}".format(val_acc), "test_acc=", "{:.5f}".format(acc), "time=",
-              "{:.5f}".format(time.time() - t))
-        print("acc:", '%.4f' % (acc), "recall:", '%.4f' % (recall), "f1_score:", '%.4f' % (f1_score),
-              "auc:", '%.4f' % (auc), "prec:", '%.4f' % (prec),)
-        # print("----------------------------------------------")
+        # print("Epoch:", '%04d' % (epoch + 1), "train_loss=", "{:.5f}".format(train_loss2),
+        #       "train_acc=", "{:.5f}".format(train_acc), "val_loss=", "{:.5f}".format(val_loss2),
+        #       "val_acc=", "{:.5f}".format(val_acc), "test_acc=", "{:.5f}".format(acc), "time=",
+        #       "{:.5f}".format(time.time() - t))
+        # print("acc:", '%.4f' % (acc), "recall:", '%.4f' % (recall), "f1_score:", '%.4f' % (f1_score),
+        #       "auc:", '%.4f' % (auc), "prec:", '%.4f' % (prec),)
+        # # print("----------------------------------------------")
 
         # writer.append(["%s,%s,%s,%s,%s" % (str(acc), str(recall), str(f1_score), str(auc), str(prec),)])
-        writer.append([acc,recall,f1_score,auc, prec, time.time() - t])
-        with open(save_log, "w", newline="") as csvfile:
-            csvwriter = csv.writer(csvfile)
-            csvwriter.writerows(writer)
+
 
     log = pd.DataFrame({
         "Accuracy": acc_list,
         "Recall": recall_list,
         "F1 score":f1_list,
         "AUC": auc_list,
-        "Precision": prec_list
+        "Precision": prec_list,        # writer.append([acc,recall,f1_score,auc, prec, time.time() - t])
+        # with open(save_log, "w", newline="") as csvfile:
+        #     csvwriter = csv.writer(csvfile)
+        #     csvwriter.writerows(writer)
+        "Time": time_list
     })
 
     log.to_csv(save_csv, index=False)

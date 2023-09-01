@@ -1,4 +1,5 @@
 import os
+import time
 
 import numpy as np
 import pandas as pd
@@ -12,6 +13,7 @@ def train_ML(model, args, dataset=None):
     f1_list = []
     auc_list = []
     prec_list = []
+    time_list = []
 
     print("Repeat 5 fold cross-validation for %s times" % (args.iexp))
     for i in tqdm(range(args.iexp*5)):
@@ -27,6 +29,7 @@ def train_ML(model, args, dataset=None):
         test_y = labels[test_mask, ]
 
         # train model
+        t = time.time()
         model.fit(train_x, np.concatenate(train_y))
         pred = model.predict(test_x)
 
@@ -37,6 +40,7 @@ def train_ML(model, args, dataset=None):
         auc = metrics.roc_auc_score(test_y, pred)
         prec = metrics.precision_score(test_y, pred)
 
+        time_list.append(time.time() - t)
         acc_list.append(acc)
         recall_list.append(recall)
         f1_list.append(f1_score)
@@ -48,7 +52,8 @@ def train_ML(model, args, dataset=None):
         "Recall": recall_list,
         "F1 score":f1_list,
         "AUC": auc_list,
-        "Precision": prec_list
+        "Precision": prec_list,
+        "Time": time_list
     })
     if not os.path.exists(("log/" + args.dataset+ "_perform/")):
         os.makedirs(("log/" + args.dataset+ "_perform/"))

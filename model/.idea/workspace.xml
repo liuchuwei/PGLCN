@@ -3,9 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1f5074f6-b269-4492-bda9-01166f2b6688" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train/TrainML.py" beforeDir="false" afterPath="$PROJECT_DIR$/train/TrainML.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train/TrainPglcn.py" beforeDir="false" afterPath="$PROJECT_DIR$/train/TrainPglcn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/gengraph.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/gengraph.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/parser_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/parser_utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +98,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pglcn.py" />
-      <option name="PARAMETERS" value="train --project train_stad_2pc_30exp" />
+      <option name="PARAMETERS" value="train --project train_coad_2pc_30exp" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -185,7 +184,7 @@
       <workItem from="1693400032036" duration="11990000" />
       <workItem from="1693455705181" duration="1488000" />
       <workItem from="1693459161750" duration="15547000" />
-      <workItem from="1693475838736" duration="18758000" />
+      <workItem from="1693475838736" duration="20252000" />
     </task>
     <servers />
   </component>
@@ -207,39 +206,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/params/train.py</url>
-          <line>102</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/params/train.py</url>
-          <line>92</line>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/params/train.py</url>
-          <line>86</line>
-          <option name="timeStamp" value="26" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/params/train.py</url>
-          <line>89</line>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pglcn.py</url>
           <line>30</line>
           <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train/TrainML.py</url>
-          <line>45</line>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train/TrainPglcn.py</url>
-          <line>204</line>
-          <option name="timeStamp" value="38" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -248,7 +217,7 @@
     <SUITE FILE_PATH="coverage/pglcn_py$train.coverage" NAME="train Coverage Results" MODIFIED="1693413284974" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/params" />
     <SUITE FILE_PATH="coverage/pglcn_py$TrainPglcn.coverage" NAME="TrainPglcn Coverage Results" MODIFIED="1693308380396" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/train" />
     <SUITE FILE_PATH="coverage/pglcn_py$train_diff_PC.coverage" NAME="train_diff_PC Coverage Results" MODIFIED="1693412871189" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/pglcn_py$pglcn.coverage" NAME="pglcn Coverage Results" MODIFIED="1693496572276" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pglcn_py$pglcn.coverage" NAME="pglcn Coverage Results" MODIFIED="1693527137734" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pglcn_py$main.coverage" NAME="main Coverage Results" MODIFIED="1693303146671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
