@@ -45,7 +45,7 @@ def train_pglcn_iteration(model, args, dataset=None):
 
     for exp in tqdm(range(args.iexp * 5)):
     # for i in tqdm(range(5)):
-    #     exp = 1
+    #     exp = 3
         best = 10000
 
         state_dict = torch.load("log/tmp.cpkt")

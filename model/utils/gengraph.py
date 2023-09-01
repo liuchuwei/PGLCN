@@ -119,7 +119,8 @@ def load_pathway_graph(args, path="data/"):
     Reac = Exp.iloc[:,0].tolist()
     Exp = Exp.drop(columns="Unnamed: 0")
 
-    Exp = Exp.apply(lambda x: (x - np.min(x)) / (np.max(x) - np.min(x))) # min_max normalization
+    # if not args.method in ['decision_tree', 'sgd', 'random_forest', 'adaboost','svc_linear', 'svc_rbf']:
+    #     Exp = Exp.apply(lambda x: (x - np.min(x)) / (np.max(x) - np.min(x))) # min_max normalization
 
     # obtain pathway dict
     Reac_dict = pd.read_csv("data/react_dict.csv")
