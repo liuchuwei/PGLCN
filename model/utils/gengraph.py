@@ -494,8 +494,8 @@ def gen_syn4(nb_shapes=60, width_basis=8, feature_generator=None, m=4):
     name = basis_type + "_" + str(width_basis) + "_" + str(nb_shapes)
 
     path = os.path.join("log/syn4_base_h20_o20")
-    writer = SummaryWriter(path)
-    io_utils.log_graph(writer, G, "graph/full")
+    # writer = SummaryWriter(path)
+    # io_utils.log_graph(writer, G, "graph/full")
 
     return G, role_id, name
 
@@ -533,6 +533,6 @@ def gen_syn5(nb_shapes=80, width_basis=8, feature_generator=None, m=3):
     name = basis_type + "_" + str(width_basis) + "_" + str(nb_shapes)
 
     path = os.path.join("log/syn5_base_h20_o20")
-    writer = SummaryWriter(path)
+    # writer = SummaryWriter(path)
 
     return G, role_id, name

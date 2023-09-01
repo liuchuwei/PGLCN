@@ -1,13 +1,16 @@
 import pickle
 import time
 
+import networkx as nx
 import numpy as np
 import torch
 from torch import optim, nn
 
 from sklearn import metrics
 from utils import gengraph, io_utils
+from utils.preprocess import preprocess_features, normalize_adj
 
+import scipy.sparse as sp
 
 def evaluate_node(ypred, labels, train_idx, test_idx):
     _, pred_labels = torch.max(ypred, 2)
@@ -63,7 +66,7 @@ def train_node_classifier(G, labels, model, args, writer=None):
 
     model.train()
     ypred = None
-    for epoch in range(args.num_epochs):
+    for epoch in range(args.epoch):
         begin_time = time.time()
         model.zero_grad()
 
@@ -88,35 +91,7 @@ def train_node_classifier(G, labels, model, args, writer=None):
         result_train, result_test = evaluate_node(
             ypred.cpu(), data["labels"], train_idx, test_idx
         )
-        if writer is not None:
-            writer.loss.append(loss)
-            writer.epoch.append(epoch)
 
-            # writer.add_scalar("loss/avg_loss", loss, epoch)
-            # writer.add_scalars(
-            #     "prec",
-            #     {"train": result_train["prec"], "test": result_test["prec"]},
-            #     epoch,
-            # )
-
-            writer.train_prec.append(result_train["prec"])
-            writer.test_prec.append(result_test["prec"])
-
-            # writer.add_scalars(
-            #     "recall",
-            #     {"train": result_train["recall"], "test": result_test["recall"]},
-            #     epoch,
-            # )
-
-            writer.train_recall.append(result_train["recall"])
-            writer.test_recall.append(result_test["recall"])
-
-            # writer.add_scalars(
-            #     "acc", {"train": result_train["acc"], "test": result_test["acc"]}, epoch
-            # )
-            #
-            writer.train_acc.append(result_train["acc"])
-            writer.test_acc.append(result_test["acc"])
 
         if epoch % 10 == 0:
             print(
@@ -138,8 +113,7 @@ def train_node_classifier(G, labels, model, args, writer=None):
 
         if scheduler is not None:
             scheduler.step()
-    print(result_train["conf_mat"])
-    print(result_test["conf_mat"])
+
 
     # computation graph
     model.eval()
@@ -147,6 +121,7 @@ def train_node_classifier(G, labels, model, args, writer=None):
         ypred, _ = model(x.cuda(), adj.cuda())
     else:
         ypred, _ = model(x, adj)
+
     if args.method == "glcn":
         sgraph = model.sgraph.detach().cpu().numpy()
         cg_data = {
@@ -169,8 +144,6 @@ def train_node_classifier(G, labels, model, args, writer=None):
     # import pdb
     # pdb.set_trace()
     io_utils.save_checkpoint(model, optimizer, args, num_epochs=-1, cg_dict=cg_data)
-    with open(args.dataset +"_writer.pickle", "wb") as f:
-        pickle.dump(writer, f)
 
 
 
@@ -185,9 +158,20 @@ def train_node_glcn_classifier(G, labels, model, args, writer=None):
     test_idx = idx[num_train:]
 
     data = gengraph.preprocess_input_graph(G, labels)
-    labels_train = torch.tensor(data["labels"][:, train_idx], dtype=torch.long)
+    # if args.dataset == "syn2":
+    #     feat = preprocess_features(np.squeeze(data["feat"]), sparse_data = False)
+    #     adj = np.array(nx.to_numpy_array(G))
+    #     adj_normalized = normalize_adj(adj + sp.eye(adj.shape[0]))
+    #     adj = np.expand_dims(np.array(adj_normalized.todense()), 0)
+    #     adj = torch.tensor(adj, dtype=torch.float)
+    #     x = torch.tensor(feat, requires_grad=True, dtype=torch.float)
+    #     adj = torch.tensor(data["adj"], dtype=torch.float)
+    #
+    # else:
     adj = torch.tensor(data["adj"], dtype=torch.float)
     x = torch.tensor(data["feat"], requires_grad=True, dtype=torch.float)
+
+    labels_train = torch.tensor(data["labels"][:, train_idx], dtype=torch.long)
     # scheduler, optimizer = train_utils.build_optimizer(
     #     args, model.parameters(), weight_decay=args.weight_decay
     # )
@@ -214,7 +198,7 @@ def train_node_glcn_classifier(G, labels, model, args, writer=None):
     # elif args.opt_scheduler == 'cos':
     #     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.opt_restart)
 
-    for epoch in range(args.num_epochs):
+    for epoch in range(args.epoch):
         begin_time = time.time()
         model.zero_grad()
 
@@ -246,35 +230,7 @@ def train_node_glcn_classifier(G, labels, model, args, writer=None):
         result_train, result_test = evaluate_node(
             ypred.cpu(), data["labels"], train_idx, test_idx
         )
-        if writer is not None:
-            writer.loss.append(loss)
-            writer.epoch.append(epoch)
 
-            # writer.add_scalar("loss/avg_loss", loss, epoch)
-            # writer.add_scalars(
-            #     "prec",
-            #     {"train": result_train["prec"], "test": result_test["prec"]},
-            #     epoch,
-            # )
-
-            writer.train_prec.append(result_train["prec"])
-            writer.test_prec.append(result_test["prec"])
-
-            # writer.add_scalars(
-            #     "recall",
-            #     {"train": result_train["recall"], "test": result_test["recall"]},
-            #     epoch,
-            # )
-
-            writer.train_recall.append(result_train["recall"])
-            writer.test_recall.append(result_test["recall"])
-
-            # writer.add_scalars(
-            #     "acc", {"train": result_train["acc"], "test": result_test["acc"]}, epoch
-            # )
-            #
-            writer.train_acc.append(result_train["acc"])
-            writer.test_acc.append(result_test["acc"])
 
         if epoch % 10 == 0:
             print(
@@ -296,8 +252,6 @@ def train_node_glcn_classifier(G, labels, model, args, writer=None):
 
         if scheduler is not None:
             scheduler.step()
-    print(result_train["conf_mat"])
-    print(result_test["conf_mat"])
 
     # computation graph
     model.eval()
@@ -327,5 +281,4 @@ def train_node_glcn_classifier(G, labels, model, args, writer=None):
     # import pdb
     # pdb.set_trace()
     io_utils.save_checkpoint(model, [opt1, opt2], args, num_epochs=-1, cg_dict=cg_data)
-    with open(args.dataset +"_writer.pickle", "wb") as f:
-        pickle.dump(writer, f)
+

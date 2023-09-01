@@ -95,14 +95,15 @@ def save_checkpoint(model, optimizer, args, num_epochs=-1, isbest=False, cg_dict
         - isbest        : True if the model has the highest accuracy so far.
         - cg_dict       : A dictionary of the sampled computation graphs.
     """
-    filename = create_filename(args.ckptdir, args, isbest, num_epochs=num_epochs)
 
+    filename = args.dataset + "_" + args.method + "_pretrain_for_explain." + "pth.tar"
     # create parent directory
-    par_dir = "../log/" + args.ckptdir
+    par_dir = "log/" + args.dataset + "_explain"
+
     if not os.path.exists(par_dir):
         os.makedirs(par_dir)
 
-    filename = "../log/" + filename
+    filename = par_dir + "/" + filename
     if isinstance(optimizer, list):
         torch.save(
             {

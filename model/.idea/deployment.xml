@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="zdj@101.33.215.247:6000 password (45)" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="zdj@192.168.10.102:22 password (19)" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="bioteam@172.31.155.0:22 password">
         <serverdata>
@@ -27,6 +27,13 @@
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="root@8.134.9.10:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/root/PGLCN/model" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
@@ -895,6 +902,13 @@
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="zdj@192.168.10.102:22 password (19)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/zdj/桌面/data/PGLCN/model" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>

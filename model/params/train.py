@@ -2,7 +2,7 @@ import argparse
 from argparse import ArgumentDefaultsHelpFormatter
 from utils.io_utils import obtain_dataset
 from utils.model_utils import obtain_placeholders, build_model
-from utils.parser_utils import set_defaults
+from utils.parser_utils import set_defaults_train
 from utils.train_utils import train_model, set_seed
 
 def argparser():
@@ -15,7 +15,7 @@ def argparser():
     parser.add_argument('--project', dest='project',
                            help='Possible values:'
                                 'Diff_PC: stad_PC1, stad_PC2...'
-                                'train_stad_2pc_30exp...')
+                                'train_stad_2pc_5exp...')
 
     # dataset
     parser.add_argument('--dataset', dest='dataset',
@@ -80,11 +80,37 @@ def argparser():
     opt_parser.add_argument('--losslr2', dest='losslr2', type=float,
                             help='Ce loss weight.')
 
+    ## gcn
+    parser.add_argument('--input_dim', dest='input_dim', type=int,
+                        help='Input feature dimension')
+    parser.add_argument('--hidden_dim', dest='hidden_dim', type=int,
+                        help='Hidden dimension')
+    parser.add_argument('--output_dim', dest='output_dim', type=int,
+                        help='Output dimension')
+    parser.add_argument('--num_classes', dest='num_classes', type=int,
+                        help='Number of label classes')
+    parser.add_argument('--num_gc_layers', dest='num_gc_layers', type=int,
+                        help='Number of graph convolution layers before each pooling')
+    parser.add_argument('--train_ratio', dest='train_ratio', type=int,
+                        help='Ratio of sample for training')
+    parser.add_argument('--test_ratio', dest='test_ratio', type=int,
+                        help='Ratio of sample for testing')
+
+    opt_parser.add_argument('--lr', dest='lr', type=float,
+                            help='Learning rate.')
+    opt_parser.add_argument('--opt-scheduler', dest='opt_scheduler', type=str,
+                            help='Type of optimizer scheduler. By default none')
+    parser.add_argument('--bn', dest='bn', action='store_const',
+                        const=True, default=False,
+                        help='Whether batch normalization is used')
+    parser.add_argument('--dropout', dest='dropout', type=float,
+            help='Dropout rate.')
+
     return parser
 
 def main(args):
     # set default parser
-    set_defaults(args)
+    set_defaults_train(args)
 
     # set seed
     set_seed(args.seed)

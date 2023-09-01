@@ -67,7 +67,7 @@ def build_model(args, placeholders=None, dataset=None, **kwargs):
 
     print("Method:", args.method)
 
-    if args.dataset == "syn1" and args.method == "gcn":
+    if args.dataset in ["syn1", "syn2", "syn3", "syn4", "syn5"] and args.method == "gcn":
 
         _, labels, _ = dataset
         num_classes = max(labels) + 1
@@ -82,7 +82,7 @@ def build_model(args, placeholders=None, dataset=None, **kwargs):
             args=args
         )
 
-    if args.dataset == "syn1" and args.method == "glcn":
+    if args.dataset in ["syn1", "syn2", "syn3", "syn4", "syn5"] and args.method == "glcn":
 
         G, labels, _ = dataset
         adj = np.array(nx.to_numpy_array(G))

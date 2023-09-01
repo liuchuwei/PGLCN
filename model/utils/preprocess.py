@@ -20,7 +20,7 @@ def sparse_to_tuple(sparse_mx):
     return sparse_mx
 
 
-def preprocess_features(features):
+def preprocess_features(features, sparse_data = True):
     """Row-normalize feature matrix and convert to tuple representation"""
     rowsum = np.array(features.sum(1), dtype=np.float32)
     r_inv = np.power(rowsum, -1).flatten()
@@ -28,7 +28,11 @@ def preprocess_features(features):
     r_mat_inv = sp.diags(r_inv)
     features = r_mat_inv.dot(features)
     # return sparse_to_tuple(features)
-    return features.todense()
+    if sparse_data:
+        features = features.todense()
+    else:
+        features = np.expand_dims(features, axis=0)
+    return features
 
 
 def normalize_adj(adj):

@@ -20,7 +20,7 @@ def train_model(model, args, log=None, dataset=None):
         G, labels, name = dataset
         train_node_classifier(G, labels, model, args=args, writer=log)
 
-    if args.dataset == "syn1" and args.method == "glcn" :
+    if args.dataset in ["syn1", "syn2", "syn3", "syn4", "syn5"]  and args.method == "glcn" :
         G, labels, name = dataset
         train_node_glcn_classifier(G, labels, model, args=args, writer=log)
 
@@ -30,7 +30,7 @@ def train_model(model, args, log=None, dataset=None):
     if args.method == "sglcn":
         train_sglcn(model, args=args)
 
-    if args.dataset == "syn1" and args.method == "gcn":
+    if args.dataset in ["syn1", "syn2", "syn3", "syn4", "syn5"]  and args.method == "gcn":
         G, labels, name = dataset
         train_node_classifier(G, labels, model, args=args, writer=log)
 
