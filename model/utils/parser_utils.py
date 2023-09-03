@@ -1,5 +1,42 @@
 def set_defaults_explain(args):
-    pass
+
+    if args.project in ["syn1_gcn", "syn2_gcn", "syn3_gcn", "syn4_gcn", "syn5_gcn"]:
+
+        # set seed
+        args.seed = 666666
+
+        # dataset & method
+        args.dataset = args.project.split("_")[0]
+        args.method = args.project.split("_")[1]
+
+        # io utils
+        args.ckptdir = "log/" + args.dataset + "_explain/" + args.dataset + "_" + args.method + "_" + "pretrain_for_explain.pth.tar"
+
+        # build model
+        args.gpu = True
+        args.hidden_dim = 20
+        args.output_dim = 20
+        args.num_gc_layers = 3
+        args.bn = False
+        args.mask_bias = False
+
+        # explainer
+        args.graph_idx = -1
+        args.mask_act = "sigmoid"
+        args.opt = "adam"
+        args.lr = 0.1
+        args.opt_scheduler = "none"
+        args.batch_size = 20
+        args.num_epochs = 100
+        args.explainer_suffix = ""
+        args.logdir = "log"
+
+    if args.project in ["syn1_glcn", "syn2_glcn", "syn3_glcn", "syn4_glcn", "syn5_glcn"]:
+
+        # set seed
+        args.seed = 666666
+
+    return args
 
 def set_defaults_train(args):
 

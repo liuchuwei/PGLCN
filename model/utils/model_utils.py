@@ -61,7 +61,55 @@ def obtain_placeholders(args, dataset):
 
     return placeholders
 
+def build_explainer(cg_dict, model, args):
 
+    if args.method == "glcn":
+
+        explainer = Explainer(
+            model=model,
+            adj=cg_dict["sgraph"],
+            feat=cg_dict["feat"],
+            label=cg_dict["label"],
+            pred=cg_dict["pred"],
+            train_idx=cg_dict["train_idx"],
+            args=args,
+            writer=None,
+            print_training=True,
+            graph_mode=False,
+            graph_idx=args.graph_idx,
+        )
+
+    elif args.method == "pglcn":
+        explainer = Explainer(
+            model=model,
+            adj=cg_dict["sgraph"],
+            feat=cg_dict["placeholder"]["second"],
+            label=cg_dict["placeholder"]["labels"],
+            pred=cg_dict["pred"],
+            train_idx=None,
+            args=args,
+            writer=None,
+            print_training=True,
+            graph_mode=False,
+            graph_idx=args.graph_idx,
+        )
+
+    else:
+        explainer = Explainer(
+            model=model,
+            adj=cg_dict["adj"],
+            feat=cg_dict["feat"],
+            label=cg_dict["label"],
+            pred=cg_dict["pred"],
+            train_idx=cg_dict["train_idx"],
+            args=args,
+            writer=None,
+            print_training=True,
+            graph_mode=False,
+            graph_idx=args.graph_idx,
+        )
+
+    return explainer
 
 def build_model(args, placeholders=None, dataset=None, **kwargs):
 
@@ -69,18 +117,33 @@ def build_model(args, placeholders=None, dataset=None, **kwargs):
 
     if args.dataset in ["syn1", "syn2", "syn3", "syn4", "syn5"] and args.method == "gcn":
 
-        _, labels, _ = dataset
-        num_classes = max(labels) + 1
+        if args.command == "train":
+            _, labels, _ = dataset
+            num_classes = max(labels) + 1
 
-        model = GcnEncoder(
-            args.input_dim,
-            args.hidden_dim,
-            args.output_dim,
-            num_classes,
-            args.num_gc_layers,
-            bn=args.bn,
-            args=args
-        )
+            model = GcnEncoder(
+                args.input_dim,
+                args.hidden_dim,
+                args.output_dim,
+                num_classes,
+                args.num_gc_layers,
+                bn=args.bn,
+                args=args
+            )
+
+        elif args.command == "explain":
+            input_dim = dataset["feat"].shape[2]
+            num_classes = dataset["pred"].shape[2]
+
+            model = GcnEncoder(
+                input_dim = input_dim,
+                hidden_dim=args.hidden_dim,
+                embedding_dim=args.output_dim,
+                label_dim=num_classes,
+                num_layers=args.num_gc_layers,
+                bn=args.bn,
+                args=args
+            )
 
     if args.dataset in ["syn1", "syn2", "syn3", "syn4", "syn5"] and args.method == "glcn":
 
