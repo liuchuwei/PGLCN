@@ -1,5 +1,45 @@
 def set_defaults_explain(args):
 
+    if args.project == "stad_pglcn":
+
+        # set seed
+        args.seed = 666666
+
+        # dataset & method
+        args.dataset = args.project.split("_")[0]
+        args.method = args.project.split("_")[1]
+
+        # io utils
+        args.ckptdir = "log/" + args.dataset + "_explain/" + args.dataset + "_" + args.method + "_" + "pretrain_for_explain.pth.tar"
+
+        # build model
+        args.placeholders = False
+        args.dropout1 = 0.6  # graph learn dropout 0.6
+        args.dropout2 = 0.0  # graph gcn dropout 0.
+        args.dropout3 = 0.0  # dense dropout  0.
+        args.bias = True
+        args.weight_decay = 1e-4  # 1e-4
+        args.hidden_gl = 70  # 70
+        args.hidden_gcn = 25  # 25
+        args.lr1 = 0.1
+        args.lr2 = 0.00005  # 0.00005
+        args.losslr1 = 0.01
+        args.losslr2 = 0.00001
+        args.omic=3
+        args.npc=2
+
+        # explainer
+        args.graph_idx = -1
+        args.mask_act = "sigmoid"
+        args.opt = "adam"
+        args.lr = 0.01
+        args.opt_scheduler = "none"
+        args.batch_size = 20
+        args.num_epochs = 201
+        args.explainer_suffix = ""
+        args.logdir = "log"
+        args.num_gc_layers = 3
+
     if args.project in ["syn1_gcn", "syn2_gcn", "syn3_gcn", "syn4_gcn", "syn5_gcn"]:
 
         # set seed
@@ -21,20 +61,75 @@ def set_defaults_explain(args):
         args.mask_bias = False
 
         # explainer
-        args.graph_idx = -1
-        args.mask_act = "sigmoid"
-        args.opt = "adam"
-        args.lr = 0.1
-        args.opt_scheduler = "none"
-        args.batch_size = 20
-        args.num_epochs = 100
-        args.explainer_suffix = ""
-        args.logdir = "log"
+        if args.dataset in ["syn1", "syn2", "syn3"]:
+            args.graph_idx = -1
+            args.mask_act = "sigmoid"
+            args.opt = "adam"
+            args.lr = 0.1
+            args.opt_scheduler = "none"
+            args.batch_size = 20
+            args.num_epochs = 100
+            args.explainer_suffix = ""
+            args.logdir = "log"
+
+        elif args.dataset in ["syn4", "syn5"]:
+            args.graph_idx = -1
+            args.mask_act = "sigmoid"
+            args.opt = "adam"
+            args.lr = 0.01
+            args.opt_scheduler = "none"
+            args.batch_size = 20
+            args.num_epochs = 100
+            args.explainer_suffix = ""
+            args.logdir = "log"
 
     if args.project in ["syn1_glcn", "syn2_glcn", "syn3_glcn", "syn4_glcn", "syn5_glcn"]:
 
         # set seed
         args.seed = 666666
+
+        # dataset & method
+        args.dataset = args.project.split("_")[0]
+        args.method = args.project.split("_")[1]
+
+        # io utils
+        args.ckptdir = "log/" + args.dataset + "_explain/" + args.dataset + "_" + args.method + "_" + "pretrain_for_explain.pth.tar"
+
+        # build model
+        args.gpu = True
+        args.hidden_dim = 20
+        args.output_dim = 20
+        args.num_gc_layers = 3
+        args.bn = False
+        args.mask_bias = False
+        args.losslr1=0.001
+        args.losslr2=0.0001
+        args.lr1=0.001
+        args.lr2=0.001
+        args.dropout=0.
+
+        # explainer
+        if args.dataset in ["syn1", "syn2", "syn3"]:
+            args.graph_idx = -1
+            args.mask_act = "sigmoid"
+            args.opt = "adam"
+            args.lr = 0.1
+            args.opt_scheduler = "none"
+            args.batch_size = 20
+            args.num_epochs = 100
+            args.explainer_suffix = ""
+            args.logdir = "log"
+
+        elif args.dataset in ["syn4", "syn5"]:
+            args.graph_idx = -1
+            args.mask_act = "sigmoid"
+            args.opt = "adam"
+            args.lr =  0.01
+            args.opt_scheduler = "none"
+            args.batch_size = 20
+            args.num_epochs = 100
+            args.explainer_suffix = ""
+            args.logdir = "log"
 
     return args
 

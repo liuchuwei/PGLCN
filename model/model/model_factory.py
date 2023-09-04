@@ -1024,6 +1024,10 @@ class Explainer:
     ):
         """Explain a single node prediction
         """
+
+        if path_mode:
+            mask_list = []
+
         # index of the query node in the new adj
         if graph_mode:
             node_idx_new = node_idx
@@ -1118,19 +1122,22 @@ class Explainer:
                         ypred,
                     )
                 single_subgraph_label = sub_label.squeeze()
-
-                if self.writer is not None:
-                    self.writer.add_scalar("mask/density", mask_density, epoch)
-                    self.writer.add_scalar(
-                        "optimization/lr",
-                        explainer.optimizer.param_groups[0]["lr"],
-                        epoch,
+                #
+                # if self.writer is not None:
+                #     self.writer.add_scalar("mask/density", mask_density, epoch)
+                #     self.writer.add_scalar(
+                #         "optimization/lr",
+                #         explainer.optimizer.param_groups[0]["lr"],
+                #         epoch,
+                #     )
+                if epoch % 25 == 0:
+                    feat_mask, mask_adj = explainer.log_mask(epoch)
+                    explainer.log_masked_adj(
+                        node_idx_new, epoch, label=single_subgraph_label
                     )
-                    if epoch % 25 == 0:
-                        explainer.log_mask(epoch)
-                        explainer.log_masked_adj(
-                            node_idx_new, epoch, label=single_subgraph_label
-                        )
+                    if path_mode:
+                        mask_list.append([epoch, feat_mask, mask_adj])
+
                         # explainer.log_adj_grad(
                         #     node_idx_new, pred_label, epoch, label=single_subgraph_label
                         # )
@@ -1173,56 +1180,59 @@ class Explainer:
                 adj_atts = nn.functional.sigmoid(adj_atts).squeeze()
                 masked_adj = adj_atts.cpu().detach().numpy() * sub_adj.squeeze()
 
-        fname = 'masked_adj_' + io_utils.gen_explainer_prefix(self.args) + (
-                'node_idx_'+str(node_idx)+'graph_idx_'+str(self.graph_idx)+'.npy')
-        with open(os.path.join(self.args.logdir, fname), 'wb') as outfile:
-            np.save(outfile, np.asarray(masked_adj.copy()))
-            print("Saved adjacency matrix to ", fname)
+        # fname = 'masked_adj_' + io_utils.gen_explainer_prefix(self.args) + (
+        #         'node_idx_'+str(node_idx)+'graph_idx_'+str(self.graph_idx)+'.npy')
+        # with open(os.path.join(self.args.logdir, fname), 'wb') as outfile:
+        #     np.save(outfile, np.asarray(masked_adj.copy()))
+        #     print("Saved adjacency matrix to ", fname)
+        if path_mode:
+            masked_adj = mask_list
+
         return masked_adj
 
     # path explain
     def explain_path_stats(self, node_indices, args, graph_idx=0, model="exp"):
         masked_adjs = self.explain(node_indices, graph_idx=graph_idx, model=model, path_mode=True)
-
-        if not args.method == "pglcn":
-            # pdb.set_trace()
-            graphs = []
-            feats = []
-            adjs = []
-            pred_all = []
-            real_all = []
-            for i, idx in enumerate(node_indices):
-                new_idx, _, feat, _, _ = self.extract_neighborhood(idx)
-                G = io_utils.denoise_graph(masked_adjs[i], new_idx, feat, threshold_num=20)
-                pred, real = self.make_pred_real(masked_adjs[i], new_idx)
-                pred_all.append(pred)
-                real_all.append(real)
-                denoised_feat = np.array([G.nodes[node]["feat"] for node in G.nodes()])
-                # denoised_adj = nx.to_numpy_matrix(G)
-                denoised_adj = nx.to_numpy_array(G)
-                graphs.append(G)
-                feats.append(denoised_feat)
-                adjs.append(denoised_adj)
-                io_utils.log_graph(
-                    self.writer,
-                    G,
-                    "graph/{}_{}_{}".format(self.args.dataset, model, i),
-                    identify_self=True,
-                    args=self.args
-                )
-
-            pred_all = np.concatenate((pred_all), axis=0)
-            real_all = np.concatenate((real_all), axis=0)
-
-            auc_all = roc_auc_score(real_all, pred_all)
-            precision, recall, thresholds = precision_recall_curve(real_all, pred_all)
-
-            plt.switch_backend("agg")
-            plt.plot(recall, precision)
-            # plt.savefig("log/pr/pr_" + self.args.dataset + "_" + model + ".png")
-            plt.savefig("log/pr_" + self.args.dataset + "_" + model + ".png")
-
-            plt.close()
+        #
+        # if not args.method == "pglcn":
+        #     # pdb.set_trace()
+        #     graphs = []
+        #     feats = []
+        #     adjs = []
+        #     pred_all = []
+        #     real_all = []
+        #     for i, idx in enumerate(node_indices):
+        #         new_idx, _, feat, _, _ = self.extract_neighborhood(idx)
+        #         G = io_utils.denoise_graph(masked_adjs[i], new_idx, feat, threshold_num=20)
+        #         pred, real = self.make_pred_real(masked_adjs[i], new_idx)
+        #         pred_all.append(pred)
+        #         real_all.append(real)
+        #         denoised_feat = np.array([G.nodes[node]["feat"] for node in G.nodes()])
+        #         # denoised_adj = nx.to_numpy_matrix(G)
+        #         denoised_adj = nx.to_numpy_array(G)
+        #         graphs.append(G)
+        #         feats.append(denoised_feat)
+        #         adjs.append(denoised_adj)
+        #         io_utils.log_graph(
+        #             self.writer,
+        #             G,
+        #             "graph/{}_{}_{}".format(self.args.dataset, model, i),
+        #             identify_self=True,
+        #             args=self.args
+        #         )
+        #
+        #     pred_all = np.concatenate((pred_all), axis=0)
+        #     real_all = np.concatenate((real_all), axis=0)
+        #
+        #     auc_all = roc_auc_score(real_all, pred_all)
+        #     precision, recall, thresholds = precision_recall_curve(real_all, pred_all)
+        #
+        #     plt.switch_backend("agg")
+        #     plt.plot(recall, precision)
+        #     # plt.savefig("log/pr/pr_" + self.args.dataset + "_" + model + ".png")
+        #     plt.savefig("log/pr_" + self.args.dataset + "_" + model + ".png")
+        #
+        #     plt.close()
 
             # auc_all = roc_auc_score(real_all, pred_all)
             # precision, recall, thresholds = precision_recall_curve(real_all, pred_all)
@@ -1235,12 +1245,12 @@ class Explainer:
             # plt.close()
 
             # with open("log/pr/auc_" + self.args.dataset + "_" + model + ".txt", "w") as f:
-            with open("log/auc_" + self.args.dataset + "_" + model + ".txt", "w") as f:
-                f.write(
-                    "dataset: {}, model: {}, auc: {}\n".format(
-                        self.args.dataset, "exp", str(auc_all)
-                    )
-                )
+            # with open("log/auc_" + self.args.dataset + "_" + model + ".txt", "w") as f:
+            #     f.write(
+            #         "dataset: {}, model: {}, auc: {}\n".format(
+            #             self.args.dataset, "exp", str(auc_all)
+            #         )
+            #     )
 
         return masked_adjs
 
@@ -1339,13 +1349,13 @@ class Explainer:
             graphs.append(G)
             feats.append(denoised_feat)
             adjs.append(denoised_adj)
-            io_utils.log_graph(
-                self.writer,
-                G,
-                "graph/{}_{}_{}".format(self.args.dataset, model, i),
-                identify_self=True,
-                args=self.args
-            )
+            # io_utils.log_graph(
+            #     self.writer,
+            #     G,
+            #     "graph/{}_{}_{}".format(self.args.dataset, model, i),
+            #     identify_self=True,
+            #     args=self.args
+            # )
 
         pred_all = np.concatenate((pred_all), axis=0)
         real_all = np.concatenate((real_all), axis=0)
@@ -1353,12 +1363,14 @@ class Explainer:
         auc_all = roc_auc_score(real_all, pred_all)
         precision, recall, thresholds = precision_recall_curve(real_all, pred_all)
 
+        plt.close()
         plt.switch_backend("agg")
         plt.plot(recall, precision)
-        # plt.savefig("log/pr/pr_" + self.args.dataset + "_" + model + ".png")
-        plt.savefig("log/pr_" + self.args.dataset + "_" + model + ".png")
-
+        plt.savefig("log/"+ self.args.dataset + "_" + "explain/" + "pr_" + self.args.method + ".png")
         plt.close()
+        # plt.savefig("log/pr_" + self.args.dataset + "_" + model + ".png")
+
+        # plt.close()
 
         # auc_all = roc_auc_score(real_all, pred_all)
         # precision, recall, thresholds = precision_recall_curve(real_all, pred_all)
@@ -1371,7 +1383,7 @@ class Explainer:
         # plt.close()
 
         # with open("log/pr/auc_" + self.args.dataset + "_" + model + ".txt", "w") as f:
-        with open("log/auc_" + self.args.dataset + "_" + model + ".txt", "w") as f:
+        with open("log/" + self.args.dataset + "_" + "explain/" + args.method + "_auc_"  + model + ".txt", "w") as f:
             f.write(
                 "dataset: {}, model: {}, auc: {}\n".format(
                     self.args.dataset, "exp", str(auc_all)
@@ -1600,6 +1612,37 @@ class Explainer:
                 real[start + 4][start + 5] = 10
             if real[start][start + 5]:
                 real[start][start + 5] = 10
+            real = real[np.triu(real) > 0]
+            real[real != 10] = 0
+            real[real == 10] = 1
+
+        if self.args.dataset == "syn3" or self.args.dataset == "syn5":
+            # num_pred = max(G.number_of_edges(), 6)
+            pred = adj[np.triu(adj) > 0]
+            real = adj.copy()
+            if real[start - 1][start] > 0:
+                real[start - 1][start] = 10
+            if real[start][start + 1] > 0:
+                real[start][start + 1] = 10
+            if real[start + 2][start + 3] > 0:
+                real[start + 2][start + 3] = 10
+            if real[start + 3][start + 4] > 0:
+                real[start + 3][start + 4] = 10
+            if real[start + 5][start + 6] > 0:
+                real[start + 5][start + 6] = 10
+            if real[start + 6][start + 7]:
+                real[start + 6][start + 7] = 10
+            if real[start - 1][start + 2]:
+                real[start - 1][start + 2] = 10
+            if real[start + 2][start + 5]:
+                real[start + 2][start + 5] = 10
+            if real[start + 0][start + 3]:
+                real[start + 0][start + 3] = 10
+            if real[start + 3][start + 6]:
+                real[start + 3][start + 6] = 10
+            if real[start + 4][start + 7]:
+                real[start + 4][start + 7] = 10
+
             real = real[np.triu(real) > 0]
             real[real != 10] = 0
             real[real == 10] = 1
@@ -1895,17 +1938,17 @@ class ExplainModule(nn.Module):
         return loss
 
     def log_mask(self, epoch):
-        plt.switch_backend("agg")
-        fig = plt.figure(figsize=(4, 3), dpi=400)
-        plt.imshow(self.mask.cpu().detach().numpy(), cmap=plt.get_cmap("BuPu"))
-        cbar = plt.colorbar()
-        cbar.solids.set_edgecolor("face")
-
-        plt.tight_layout()
-        fig.canvas.draw()
-        self.writer.add_image(
-            "mask/mask", tensorboardX.utils.figure_to_image(fig), epoch
-        )
+        # plt.switch_backend("agg")
+        # fig = plt.figure(figsize=(4, 3), dpi=400)
+        # plt.imshow(self.mask.cpu().detach().numpy(), cmap=plt.get_cmap("BuPu"))
+        # cbar = plt.colorbar()
+        # cbar.solids.set_edgecolor("face")
+        #
+        # plt.tight_layout()
+        # fig.canvas.draw()
+        # self.writer.add_image(
+        #     "mask/mask", tensorboardX.utils.figure_to_image(fig), epoch
+        # )
 
         # fig = plt.figure(figsize=(4,3), dpi=400)
         # plt.imshow(self.feat_mask.cpu().detach().numpy()[:,np.newaxis], cmap=plt.get_cmap('BuPu'))
@@ -1915,34 +1958,36 @@ class ExplainModule(nn.Module):
         # plt.tight_layout()
         # fig.canvas.draw()
         # self.writer.add_image('mask/feat_mask', tensorboardX.utils.figure_to_image(fig), epoch)
-        io_utils.log_matrix(
-            self.writer, torch.sigmoid(self.feat_mask), "mask/feat_mask", epoch
-        )
-
-        fig = plt.figure(figsize=(4, 3), dpi=400)
-        # use [0] to remove the batch dim
-        plt.imshow(self.masked_adj[0].cpu().detach().numpy(), cmap=plt.get_cmap("BuPu"))
-        cbar = plt.colorbar()
-        cbar.solids.set_edgecolor("face")
-
-        plt.tight_layout()
-        fig.canvas.draw()
-        self.writer.add_image(
-            "mask/adj", tensorboardX.utils.figure_to_image(fig), epoch
-        )
-
-        if self.args.mask_bias:
-            fig = plt.figure(figsize=(4, 3), dpi=400)
-            # use [0] to remove the batch dim
-            plt.imshow(self.mask_bias.cpu().detach().numpy(), cmap=plt.get_cmap("BuPu"))
-            cbar = plt.colorbar()
-            cbar.solids.set_edgecolor("face")
-
-            plt.tight_layout()
-            fig.canvas.draw()
-            self.writer.add_image(
-                "mask/bias", tensorboardX.utils.figure_to_image(fig), epoch
-            )
+        # io_utils.log_matrix(
+        #     self.writer, torch.sigmoid(self.feat_mask), "mask/feat_mask", epoch
+        # )
+        feat_mask = torch.sigmoid(self.feat_mask)
+        mask_adj = self.masked_adj[0].cpu().detach().numpy()
+        # fig = plt.figure(figsize=(4, 3), dpi=400)
+        # # use [0] to remove the batch dim
+        # plt.imshow(self.masked_adj[0].cpu().detach().numpy(), cmap=plt.get_cmap("BuPu"))
+        # cbar = plt.colorbar()
+        # cbar.solids.set_edgecolor("face")
+        #
+        # plt.tight_layout()
+        # fig.canvas.draw()
+        # self.writer.add_image(
+        #     "mask/adj", tensorboardX.utils.figure_to_image(fig), epoch
+        # )
+        #
+        # if self.args.mask_bias:
+        #     fig = plt.figure(figsize=(4, 3), dpi=400)
+        #     # use [0] to remove the batch dim
+        #     plt.imshow(self.mask_bias.cpu().detach().numpy(), cmap=plt.get_cmap("BuPu"))
+        #     cbar = plt.colorbar()
+        #     cbar.solids.set_edgecolor("face")
+        #
+        #     plt.tight_layout()
+        #     fig.canvas.draw()
+        #     self.writer.add_image(
+        #         "mask/bias", tensorboardX.utils.figure_to_image(fig), epoch
+        #     )
+        return feat_mask, mask_adj
 
     def log_adj_grad(self, node_idx, pred_label, epoch, label=None):
         log_adj = False
@@ -2045,7 +2090,7 @@ class ExplainModule(nn.Module):
                 masked_adj,
                 node_idx,
                 feat=None,
-                threshold=0.2,  # threshold_num=20,
+                threshold=0.1,  # threshold_num=20,
                 max_component=True,
             )
             io_utils.log_graph(

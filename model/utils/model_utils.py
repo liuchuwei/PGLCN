@@ -147,22 +147,44 @@ def build_model(args, placeholders=None, dataset=None, **kwargs):
 
     if args.dataset in ["syn1", "syn2", "syn3", "syn4", "syn5"] and args.method == "glcn":
 
-        G, labels, _ = dataset
-        adj = np.array(nx.to_numpy_array(G))
-        adj_normalized = normalize_adj(adj + sp.eye(adj.shape[0]))
-        edge = np.array(np.nonzero(adj_normalized.todense()))
-        num_classes = max(labels) + 1
+        if args.command == "train":
 
-        model = GlcnEncoder(
-            args.input_dim,
-            args.hidden_dim,
-            args.output_dim,
-            num_classes,
-            args.num_gc_layers,
-            bn=args.bn,
-            args=args,
-            edge=edge
-        )
+            G, labels, _ = dataset
+            adj = np.array(nx.to_numpy_array(G))
+            adj_normalized = normalize_adj(adj + sp.eye(adj.shape[0]))
+            edge = np.array(np.nonzero(adj_normalized.todense()))
+            num_classes = max(labels) + 1
+
+            model = GlcnEncoder(
+                args.input_dim,
+                args.hidden_dim,
+                args.output_dim,
+                num_classes,
+                args.num_gc_layers,
+                bn=args.bn,
+                args=args,
+                edge=edge
+            )
+
+
+        elif args.command == "explain":
+            input_dim = dataset["feat"].shape[2]
+            num_classes = dataset["pred"].shape[2]
+
+            adj = np.squeeze(dataset['adj'])
+            adj_normalized = normalize_adj(adj + sp.eye(adj.shape[0]))
+            edge = np.array(np.nonzero(adj_normalized.todense()))
+
+            model = GlcnEncoder(
+                input_dim,
+                args.hidden_dim,
+                args.output_dim,
+                num_classes,
+                args.num_gc_layers,
+                bn=args.bn,
+                args=args,
+                edge=edge
+            )
 
     if args.method == "sglcn":
         model = SGLCN(args, placeholders=placeholders)

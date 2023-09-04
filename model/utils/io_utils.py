@@ -308,6 +308,7 @@ def log_graph(
     min_color = min([d for (u, v, d) in Gc.edges(data="weight", default=1)])
     # color range: gray to black
     edge_vmin = 2 * min_color - edge_vmax
+
     nx.draw(
         Gc,
         pos=pos_layout,
@@ -326,13 +327,20 @@ def log_graph(
         node_size=50,
         alpha=0.8,
     )
+
+    # if args.method == "pglcn":
+    #     node_labels = Gc.nodes.data
+    #     nx.draw_networkx_labels(Gc, pos=pos_layout, labels=node_labels, font_size=20)
+
     fig.axes[0].xaxis.set_visible(False)
     fig.canvas.draw()
 
     logdir = "log" if not hasattr(args, "logdir") or not args.logdir else str(args.logdir)
     if nodecolor != "feat":
         name += gen_explainer_prefix(args)
-    save_path = os.path.join(logdir, name  + "_" + str(epoch) + ".pdf")
+    name = args.method + "_" + name
+    dataset_dir = args.dataset + "_explain"
+    save_path = os.path.join(logdir, dataset_dir, name  + "_" + str(epoch) + ".pdf")
     print(logdir + "/" + name + gen_explainer_prefix(args) + "_" + str(epoch) + ".pdf")
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     plt.savefig(save_path, format="pdf")
