@@ -3,6 +3,7 @@ import statistics
 
 import networkx as nx
 import numpy as np
+import pandas as pd
 import tensorboardX
 import torch
 from matplotlib import pyplot as plt
@@ -347,3 +348,253 @@ def log_graph(
 
     # img = tensorboardX.utils.figure_to_image(fig)
     # writer.add_image(name, img, epoch)
+
+
+# save mask
+def saveMask(masked_adj, args):
+    feat_mask = [item[1].detach().cpu().tolist() for item in masked_adj]
+    feat_mask = np.array(feat_mask)
+    adj_mask = [item[2] for item in masked_adj]
+    adj_mask = np.array(adj_mask)
+    np.save("log/" + args.dataset + "_explain/feat_mask.npy", feat_mask)
+    np.save("log/" + args.dataset + "_explain/adj_mask.npy", adj_mask)
+
+
+# load mask
+def loadMask(args):
+    adj_mask = np.load("log/" + args.dataset + "_explain/adj_mask.npy", )
+    return adj_mask
+
+# Get_sub_node_edge
+def Get_sub_node_edge(Gc):
+    sub_edge = nx.get_edge_attributes(Gc, 'weight')
+    edge = list(sub_edge.keys())
+    weights = [sub_edge[item] for item in edge]
+    edge = [[item[0], item[1]] for item in edge]
+    edge = np.array(edge)
+    edge = np.stack(edge)
+    edge = pd.DataFrame(edge)
+    edge['weight'] = weights
+
+    id = nx.get_node_attributes(Gc, 'id').items()
+    path = nx.get_node_attributes(Gc, 'path').items()
+
+    node = pd.DataFrame({'id': [item[0] for item in id],
+                         'name': [item[1] for item in id],
+                         'path': [item[1] for item in path]})
+
+    return edge, node
+
+# draw mask
+def DrawPathMask(adj_mask, args, cg_dict, imm = False, show_label=True):
+
+    if imm:
+        Imm_res = pd.read_csv("log/stad_explain/stad_imm.csv")
+        Imm_path = Imm_res.loc[Imm_res["p.adj"]<0.05, "path"].tolist()
+
+    ## denoise_graph
+    for id in range(adj_mask.shape[0]):
+        adj = adj_mask[id]
+
+        if imm:
+            judge = [item in Imm_path for item in cg_dict['path']['id'].tolist()]
+            adj = adj[judge][:,judge]
+
+        out_id = id * 25
+        import networkx as nx
+        num_nodes = adj.shape[-1]
+        G = nx.Graph()
+        G.add_nodes_from(range(num_nodes))
+        G.nodes[0]["self"] = 1
+
+        feat = None
+        if feat is not None:
+            for node in G.nodes():
+                G.nodes[node]["feat"] = feat[node]
+
+        if imm:
+            label = range(num_nodes)
+            feat = cg_dict['path']
+            id = feat['id'][judge].tolist()
+            path = feat['Path'][judge].tolist()
+
+        else:
+            label = range(num_nodes)
+            feat = cg_dict['path']
+            id = feat['id'].tolist()
+            path = feat['Path'].tolist()
+
+        for node in G.nodes():
+            G.nodes[node]["label"] = label[node]
+            G.nodes[node]["id"] = id[node]
+            G.nodes[node]["path"] = path[node]
+
+        threshold = 0.1
+        if threshold is not None:
+            weighted_edge_list = [
+                (i, j, adj[i, j])
+                for i in range(num_nodes)
+                for j in range(num_nodes)
+                if adj[i, j] >= threshold
+            ]
+        else:
+            weighted_edge_list = [
+                (i, j, adj[i, j])
+                for i in range(num_nodes)
+                for j in range(num_nodes)
+                if adj[i, j] > 1e-6
+            ]
+        G.add_weighted_edges_from(weighted_edge_list)
+        max_component = True
+
+        if max_component:
+            largest_cc = max(nx.connected_components(G), key=len)
+            G = G.subgraph(largest_cc).copy()
+        else:
+            # remove zero degree nodes
+            G.remove_nodes_from(list(nx.isolates(G)))
+
+        ## log_graph
+        from matplotlib import pyplot as plt
+        Gc = G
+        cmap = plt.get_cmap("Set1")
+        plt.switch_backend("agg")
+        fig_size = (4, 3)
+        dpi = 300
+        fig = plt.figure(figsize=fig_size, dpi=dpi)
+
+        node_colors = []
+        # edge_colors = [min(max(w, 0.0), 1.0) for (u,v,w) in Gc.edges.data('weight', default=1)]
+        edge_colors = [w for (u, v, w) in Gc.edges.data("weight", default=1)]
+
+        # maximum value for node color
+        vmax = 8
+        nodecolor = "label"
+        for i in Gc.nodes():
+            if nodecolor == "feat" and "feat" in Gc.nodes[i]:
+                num_classes = Gc.nodes[i]["feat"].size()[0]
+                if num_classes >= 10:
+                    cmap = plt.get_cmap("tab20")
+                    vmax = 19
+                elif num_classes >= 8:
+                    cmap = plt.get_cmap("tab10")
+                    vmax = 9
+                break
+
+        feat_labels = {}
+        identify_self = True
+        for i in Gc.nodes():
+            if identify_self and "self" in Gc.nodes[i]:
+                node_colors.append(0)
+            elif nodecolor == "label" and "label" in Gc.nodes[i]:
+                node_colors.append(Gc.nodes[i]["label"] + 1)
+            elif nodecolor == "feat" and "feat" in Gc.nodes[i]:
+                # print(Gc.nodes[i]['feat'])
+                feat = Gc.nodes[i]["feat"].detach().numpy()
+                # idx with pos val in 1D array
+                feat_class = 0
+                for j in range(len(feat)):
+                    if feat[j] == 1:
+                        feat_class = j
+                        break
+                node_colors.append(feat_class)
+                feat_labels[i] = feat_class
+            else:
+                node_colors.append(1)
+
+        label_node_feat = False
+        if not label_node_feat:
+            feat_labels = None
+
+        plt.switch_backend("agg")
+        fig = plt.figure(figsize=fig_size, dpi=dpi)
+
+        if Gc.number_of_nodes() == 0:
+            raise Exception("empty graph")
+        if Gc.number_of_edges() == 0:
+            raise Exception("empty edge")
+        # remove_nodes = []
+        # for u in Gc.nodes():
+        #    if Gc
+        pos_layout = nx.kamada_kawai_layout(Gc, weight=None)
+        # pos_layout = nx.spring_layout(Gc, weight=None)
+
+        weights = [d for (u, v, d) in Gc.edges(data="weight", default=1)]
+        edge_vmax = None
+        import statistics
+
+        if edge_vmax is None:
+            edge_vmax = statistics.median_high(
+                [d for (u, v, d) in Gc.edges(data="weight", default=1)]
+            )
+        min_color = min([d for (u, v, d) in Gc.edges(data="weight", default=1)])
+        # color range: gray to black
+        edge_vmin = 2 * min_color - edge_vmax
+
+        if show_label:
+            if imm:
+                if out_id < 100:
+                    node_labels = nx.get_node_attributes(G, 'path')
+                    nx.draw_networkx_labels(Gc, pos=pos_layout, labels=node_labels, font_size=3)
+                if out_id in [100, 125]:
+                    node_labels = nx.get_node_attributes(G, 'path')
+                    nx.draw_networkx_labels(Gc, pos=pos_layout, labels=node_labels, font_size=3)
+                elif out_id in [150, 175]:
+                    node_labels = nx.get_node_attributes(G, 'path')
+                    nx.draw_networkx_labels(Gc, pos=pos_layout, labels=node_labels, font_size=4)
+                elif out_id == 200:
+                    node_labels = nx.get_node_attributes(G, 'path')
+                    nx.draw_networkx_labels(Gc, pos=pos_layout, labels=node_labels, font_size=5)
+
+            else:
+                if out_id < 100:
+                    node_labels = nx.get_node_attributes(G, 'label')
+                    nx.draw_networkx_labels(Gc, pos=pos_layout, labels=node_labels, font_size=3)
+                if out_id in [100, 125]:
+                    node_labels = nx.get_node_attributes(G, 'path')
+                    nx.draw_networkx_labels(Gc, pos=pos_layout, labels=node_labels, font_size=3)
+                elif out_id in [150, 175]:
+                    node_labels = nx.get_node_attributes(G, 'path')
+                    nx.draw_networkx_labels(Gc, pos=pos_layout, labels=node_labels, font_size=4)
+                elif out_id == 200:
+                    node_labels = nx.get_node_attributes(G, 'path')
+                    nx.draw_networkx_labels(Gc, pos=pos_layout, labels=node_labels, font_size=5)
+
+        nx.draw(
+            Gc,
+            pos=pos_layout,
+            with_labels=False,
+            font_size=4,
+            labels=feat_labels,
+            # node_color=node_colors,
+            vmin=0,
+            vmax=vmax,
+            cmap=cmap,
+            edge_color=edge_colors,
+            edge_cmap=plt.get_cmap("Greys"),
+            edge_vmin=edge_vmin,
+            edge_vmax=edge_vmax,
+            width=1.0,
+            node_size=50,
+            alpha=0.8,
+        )
+
+        subedge, subnode = Get_sub_node_edge(Gc)
+
+        fig.axes[0].xaxis.set_visible(False)
+        fig.canvas.draw()
+        if show_label:
+            if imm:
+                plt.savefig("log/" + args.dataset + "_explain/explain_imm_%s.pdf" % (out_id), format="pdf")
+                subedge.to_csv("log/" + args.dataset + "_explain/explain_imm_edge_%s.csv" % (out_id))
+                subnode.to_csv("log/" + args.dataset + "_explain/explain_imm_node_%s.csv" % (out_id))
+            else:
+                plt.savefig("log/" + args.dataset + "_explain/explain_%s.pdf" % (out_id), format="pdf")
+                subedge.to_csv("log/" + args.dataset + "_explain/explain_edge_%s.csv" % (out_id))
+                subnode.to_csv("log/" + args.dataset + "_explain/explain_node_%s.csv" % (out_id))
+        else:
+            if imm:
+                plt.savefig("log/" + args.dataset + "_explain/explain_imm_%s_plain.pdf" % (out_id), format="pdf")
+            else:
+                plt.savefig("log/" + args.dataset + "_explain/explain_%s_plain.pdf" % (out_id), format="pdf")
+        plt.close()

@@ -158,6 +158,20 @@ class PGLCN(nn.Module):
 
         return pred
 
+    def extract_feature(self, x):
+        _, self.sgraph = self.conv_gl(self.input)
+        nn = self.apply_bn(x)
+        h0 = self.conv_first(nn, self.sgraph)
+        h0 = self.apply_bn(h0)
+        # h1 = self.conv_last(h0, self.sgraph)
+        h1 = self.conv_last(h0, self.sgraph)
+        h1 = self.apply_bn(h1)
+        h2 = torch.cat((h0, h1), dim=2)
+        h2 = torch.flatten(h2, start_dim=1)
+        pred = self.pred_model(h2)
+
+        return pred
+
     def apply_bn(self, x):
         """ Batch normalization of 3D tensor x
         """

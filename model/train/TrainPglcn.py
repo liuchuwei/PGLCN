@@ -310,3 +310,19 @@ def train_pglcn(model, args, dataset=None):
     io_utils.save_checkpoint(model, [opt1, opt2], args, num_epochs=-1, cg_dict=cg_data)
     # with open(args.dataset +"_writer.pickle", "wb") as f:
     #     pickle.dump(log, f)
+
+    # log extract feature
+    raw_feature = X
+    extract_feature = model.extract_feature(torch.tensor(X, dtype=torch.float32).cuda())
+
+    raw_feature = raw_feature.reshape(raw_feature.shape[0], -1)
+    labels = np.squeeze(dataset[4])
+    extract_feature = np.array(extract_feature.cpu().detach())
+    if len(extract_feature.shape) > 2:
+        extract_feature = extract_feature.reshape(extract_feature.shape[0], -1)
+
+    par_dir = "log/" + args.dataset + "_explain/"
+
+    np.savetxt(par_dir + "raw_feature.csv", raw_feature, delimiter=',')
+    np.savetxt(par_dir +  "labels.csv", labels, delimiter=',')
+    np.savetxt(par_dir + "extract_feature.csv", extract_feature, delimiter=',')

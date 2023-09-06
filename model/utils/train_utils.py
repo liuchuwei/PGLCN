@@ -8,7 +8,7 @@ from train.TrainNodeClassifier import *
 def train_model(model, args, log=None, dataset=None):
 
     if args.method == "pglcn":
-        if args.project=="pretrain_stad":
+        if args.project in ["pretrain_stad", "pretrain_coad", "pretrain_ucec"]:
             train_pglcn(model, args=args, dataset=dataset)
         else:
             train_pglcn_iteration(model, args=args, dataset=dataset)

@@ -25,7 +25,7 @@ def set_defaults_explain(args):
         args.lr2 = 0.00005  # 0.00005
         args.losslr1 = 0.01
         args.losslr2 = 0.00001
-        args.omic=3
+        args.omic=1
         args.npc=2
 
         # explainer
@@ -39,6 +39,7 @@ def set_defaults_explain(args):
         args.explainer_suffix = ""
         args.logdir = "log"
         args.num_gc_layers = 3
+        args.combine_imm = True
 
     if args.project in ["syn1_gcn", "syn2_gcn", "syn3_gcn", "syn4_gcn", "syn5_gcn"]:
 
@@ -199,44 +200,40 @@ def set_defaults_train(args):
 
         return args
 
-    if args.project == "stad_pglcn":
-        pass
 
-    if args.project in ['train_stad_2pc_5exp', 'train_coad_2pc_5exp', 'train_ucec_2pc_5exp',
-                        'pretrain_stad']:
+    if args.project in ['pretrain_stad', 'pretrain_coad', 'pretrain_ucec', ]:
 
         # dataset
         args.dataset=args.project.split("_")[1]
         args.method='pglcn'
-        args.item="PC2"
-        args.omic=3
+        args.item="g"
+        args.omic=1
         args.npc=2
         args.imbalance=True
 
         # device
         args.gpu=True
 
-        # model
-        if args.dataset=="stad":
-            args.placeholders=True
-            args.dropout1=0.6  # graph learn dropout 0.6
-            args.dropout2=0.0  # graph gcn dropout 0.
-            args.dropout3=0.0  # dense dropout  0.
-            args.bias=True
-            args.weight_decay=1e-4  # 1e-4
-            args.hidden_gl=70 # 70
-            args.hidden_gcn=25 # 25
+        if args.dataset == "stad":
+            args.placeholders = True
+            args.dropout1 = 0.6  # graph learn dropout 0.6
+            args.dropout2 = 0.0  # graph gcn dropout 0.
+            args.dropout3 = 0.0  # dense dropout  0.
+            args.bias = True
+            args.weight_decay = 1e-4  # 1e-4
+            args.hidden_gl = 70  # 70
+            args.hidden_gcn = 25  # 25
 
             # train
-            args.seed=666666
-            args.iexp=5
-            args.lr1=0.1
-            args.lr2=0.00005   # 0.00005
-            args.losslr1=0.01
-            args.losslr2=0.00001
-            args.epoch=100
-            args.clip=2.0
-            args.early_stopping=10
+            args.seed = 666666
+            args.iexp = 5
+            args.lr1 = 0.1
+            args.lr2 = 0.00005  # 0.00005
+            args.losslr1 = 0.01
+            args.losslr2 = 0.00001
+            args.epoch = 100  # 100
+            args.clip = 2.0
+            args.early_stopping = 10
 
         if args.dataset == "coad":
             args.placeholders = True
@@ -280,9 +277,9 @@ def set_defaults_train(args):
             args.clip = 2.0
             args.early_stopping = 10
 
-    if args.project in ["stad_PC1", "stad_PC3", "stad_PC4", "stad_PC5",
-           "coad_PC1", "coad_PC3", "coad_PC4", "coad_PC5",
-           "ucec_PC1", "ucec_PC3", "ucec_PC4", "ucec_PC5",
+    if args.project in ["stad_PC1", "stad_PC2", "stad_PC3", "stad_PC4", "stad_PC5",
+           "coad_PC1", "coad_PC2", "coad_PC3", "coad_PC4", "coad_PC5",
+           "ucec_PC1", "ucec_PC2", "ucec_PC3", "ucec_PC4", "ucec_PC5",
            "stad_g", "stad_c", "stad_m","stad_gc", "stad_gm", "stad_cm",
            "coad_g", "coad_c", "coad_m", "coad_gc", "coad_gm", "coad_cm",
            "ucec_g", "ucec_c", "ucec_m", "ucec_gc", "ucec_gm", "ucec_cm"
@@ -323,7 +320,7 @@ def set_defaults_train(args):
             args.lr2 = 0.00005  # 0.00005
             args.losslr1 = 0.01
             args.losslr2 = 0.00001
-            args.epoch = 100
+            args.epoch = 100 # 100
             args.clip = 2.0
             args.early_stopping = 10
 
@@ -371,9 +368,9 @@ def set_defaults_train(args):
 
     if args.method in ['decision_tree', 'sgd', 'random_forest', 'adaboost','svc_linear', 'svc_rbf'
            ]:
-        args.item="PC2"
+        args.item="g"
         args.npc=2
-        args.omic=3
+        args.omic=1
         args.iexp=5
         args.imbalance=True
         args.seed = 666666
