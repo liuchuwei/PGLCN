@@ -52,10 +52,10 @@
    ```sh
    conda env create -f environment.yml
    ```
-3. Based on your use, you may need to download one or more of the following
-
-   a. [Data files](https://drive.google.com/drive/folders/1DEYx3OodVK8iX0bxYjvdnYTJ1hyJ6gTs) 
-
+3. Based on your use, you may need to download one or more of the following  
+   a. [Data files](https://drive.google.com/drive/folders/1xPIbbOrkoGTwEcUyY9H-D92p-bIA7Oxg?usp=drive_link)  
+   b. [Log files](https://drive.google.com/drive/folders/1791x5rgFCPVCwyMGLT9_MHWNCcyPokqs?usp=drive_link)  
+   c. [NoteBook](https://drive.google.com/drive/folders/1791x5rgFCPVCwyMGLT9_MHWNCcyPokqs?usp=drive_link)
 <!-- USAGE EXAMPLES -->
 ## Usage
 1. Activate the created conda environment
