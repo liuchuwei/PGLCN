@@ -55,7 +55,7 @@
 3. Based on your use, you may need to download one or more of the following  
    a. [Data files](https://drive.google.com/drive/folders/1xPIbbOrkoGTwEcUyY9H-D92p-bIA7Oxg?usp=drive_link)  
    b. [Log files](https://drive.google.com/drive/folders/1791x5rgFCPVCwyMGLT9_MHWNCcyPokqs?usp=drive_link)  
-   c. [NoteBook](https://drive.google.com/drive/folders/1791x5rgFCPVCwyMGLT9_MHWNCcyPokqs?usp=drive_link)
+   c. [NoteBook](https://drive.google.com/drive/folders/1X7kdC5xGwTRqdvtRXmL0uWio9S5qcrwS?usp=sharing)
 <!-- USAGE EXAMPLES -->
 ## Usage
 1. Activate the created conda environment
