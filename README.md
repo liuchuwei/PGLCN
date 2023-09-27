@@ -78,3 +78,5 @@ Distributed under the GPL-2.0 License License. See `LICENSE` for more informatio
 ## Contact
 <a href="Liuchw3:liuchw3@mail2.sysu.edu.cn">liuchw3@mail2.sysu.edu.cn</a>
 ## References
+Biological informed graph neural network for tumor mutation burden prediction and immunotherapy-related pathway analysis in gastric cancer,
+Computational and Structural Biotechnology Journal, Volume 21, 2023, Pages 4540-4551, ISSN 2001-0370, https://doi.org/10.1016/j.csbj.2023.09.021.
